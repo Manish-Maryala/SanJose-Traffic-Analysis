@@ -68,22 +68,22 @@ st.write("## 📊 Looker Studio Dashboard")
 LOOKER_STUDIO_EMBED_URL = "https://lookerstudio.google.com/embed/reporting/14d0f77c-e681-4a0f-ba3f-b7051d514f34/page/NdI4E"
 st.components.v1.iframe(LOOKER_STUDIO_EMBED_URL, width=900, height=600, scrolling=True)
 
-# ---- ML Prediction Section ----
+# ---- ADDING MACHINE LEARNING PREDICTION ----
 st.write("## 🚀 Predict Traffic Volume using BigQuery ML")
 
-# Get User Input
+# Get user input for Latitude & Longitude
 latitude = st.number_input("Enter Latitude", value=37.3382)
 longitude = st.number_input("Enter Longitude", value=-121.8863)
 facility_id = st.number_input("Enter Facility ID", value=12345)
 intid = st.number_input("Enter INTID", value=6789)
 
-# Run ML.PREDICT Query when Button is Clicked
+# Run ML.PREDICT Query when user clicks button
 if st.button("Predict ADT Traffic Volume"):
     ml_query = f"""
     SELECT predicted_ADT
     FROM ML.PREDICT(
         MODEL `averagetraffic.Traffic_Data.traffic_prediction_model`,
-        (SELECT AS STRUCT {latitude} AS LATITUDE, {longitude} AS LONGITUDE, 
+        (SELECT {latitude} AS LATITUDE, {longitude} AS LONGITUDE, 
                 {facility_id} AS FACILITYID, {intid} AS INTID)
     )
     """
