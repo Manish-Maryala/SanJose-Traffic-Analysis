@@ -70,6 +70,7 @@ st.components.v1.iframe(LOOKER_STUDIO_EMBED_URL, width=900, height=600, scrollin
 # ---- ML Prediction Section ----
 st.write("## 🚀 Predict Traffic Volume using BigQuery ML")
 
+
 # Get User Input
 latitude = st.number_input("Enter Latitude", value=37.3382)
 longitude = st.number_input("Enter Longitude", value=-121.8863)
