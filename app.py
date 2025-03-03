@@ -1,9 +1,10 @@
+import os
 import streamlit as st
 import pandas as pd
 import folium
 from streamlit_folium import folium_static
 from google.cloud import bigquery
-
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/app/service-account.json"
 # Streamlit Page Config
 st.set_page_config(page_title="San Jose Traffic Dashboard", layout="wide")
 
