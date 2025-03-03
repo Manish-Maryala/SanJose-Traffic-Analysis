@@ -12,12 +12,14 @@ st.set_page_config(page_title="San Jose Traffic Dashboard", layout="wide")
 # ---- App Title ----
 st.title("🚦 San Jose Traffic Dashboard")
 
-# ---- LOAD GOOGLE CLOUD CREDENTIALS FROM STREAMLIT SECRETS ----
-service_account_info = st.secrets["gcp_service_account"]
-credentials = service_account.Credentials.from_service_account_info(service_account_info)
-
-# Initialize BigQuery Client
-client = bigquery.Client(credentials=credentials, project=service_account_info["project_id"])
+# ---- Load Google Cloud Credentials ----
+try:
+    service_account_info = st.secrets["gcp_service_account"]
+    credentials = service_account.Credentials.from_service_account_info(service_account_info)
+    client = bigquery.Client(credentials=credentials, project=service_account_info["project_id"])
+    st.write("✅ Successfully connected to BigQuery!")
+except Exception as e:
+    st.error(f"🚨 Error loading Google Cloud credentials: {e}")
 
 # ---- Load Data from BigQuery ----
 PROJECT_ID = "averagetraffic"
@@ -63,13 +65,11 @@ st.line_chart(traffic_over_time)
 
 # ---- Embed Looker Studio Dashboard ----
 st.write("## 📊 Looker Studio Dashboard")
-
 LOOKER_STUDIO_EMBED_URL = "https://lookerstudio.google.com/embed/reporting/14d0f77c-e681-4a0f-ba3f-b7051d514f34/page/NdI4E"
 st.components.v1.iframe(LOOKER_STUDIO_EMBED_URL, width=900, height=600, scrolling=True)
 
 # ---- ML Prediction Section ----
 st.write("## 🚀 Predict Traffic Volume using BigQuery ML")
-
 
 # Get User Input
 latitude = st.number_input("Enter Latitude", value=37.3382)
@@ -83,7 +83,7 @@ if st.button("Predict ADT Traffic Volume"):
     SELECT predicted_ADT
     FROM ML.PREDICT(
         MODEL `averagetraffic.Traffic_Data.traffic_prediction_model`,
-        (SELECT {latitude} AS LATITUDE, {longitude} AS LONGITUDE, 
+        (SELECT AS STRUCT {latitude} AS LATITUDE, {longitude} AS LONGITUDE, 
                 {facility_id} AS FACILITYID, {intid} AS INTID)
     )
     """
