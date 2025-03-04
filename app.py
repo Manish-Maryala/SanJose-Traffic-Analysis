@@ -9,8 +9,11 @@ from google.oauth2 import service_account
 
 st.set_page_config(page_title="San Jose Traffic Dashboard", layout="wide")
 
-
-st.title("San Jose Traffic Dashboard")
+st.markdown(
+    "<h1 style='text-align: center;'>San Jose Traffic Dashboard</h1>",
+    unsafe_allow_html=True
+)
+#st.title("San Jose Traffic Dashboard")
 
 
 try:
